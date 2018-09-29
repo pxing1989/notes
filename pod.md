@@ -1,5 +1,5 @@
 # <center>pod<center>
-##1.pod的yaml文件模板及属性详解
+## 1.pod的yaml文件模板及属性详解
 ```yaml
 apiVersion: v1        　　          #必选，版本号，例如v1,版本号必须可以用 kubectl api-versions 查询到 .
 kind: Pod       　　　　　　         #必选，Pod
@@ -184,5 +184,5 @@ spec:
 其中，yaml文件需要注意以下几点  
    + yaml中的name不能与旧的rc相同
    + 在selector中至少要有一个label与旧的RC的label不同，以标识其为新的RC，
-- ###通过kubectl命令滚动升级  
+- ### 通过kubectl命令滚动升级  
 ``kubectl rolling-update redis-master --image=redis-master:2.0``
