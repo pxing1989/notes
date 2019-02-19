@@ -1,0 +1,38 @@
+### master
+- 执行以下shell代码用于安装三个程序
+```shell
+wget -o /etc/yum.repos.d/ https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+EOF
+yum install kubelet kubeadm docker-ce -y
+```
+- 将程序设置成开机启动
+`` systemctl enable kubelet docker``
+- 设置ip转发,开启网桥。编辑/etc/sysctl.conf，添加如下：
+`` net.bridge.bridge-nf-call-ip6tables = 1 ``
+`` net.bridge.bridge-nf-call-ip6tables = 1 ``
+`` net.bridge.bridge-nf-call-iptables = 1 ``
+`` net.bridge.bridge-nf-call-arptables = 1 ``
+`` net.ipv4.ip_forward=1``
+- 设置kubelet忽略swap。修改/etc/sysconfig/kubelet文件
+`` KUBELET_EXTRA_ARGS="--fail-swap-on=false" ``
+- 执行kubeadm init命令，具体如下，其中apiserver-advertise-address为双网卡所设置
+`` kubeadm init --pod-network-cidr=10.244.0.0/16 service-cidr=10.96.0.0/12 --ignore-preflight-errors=SWAP --apiserver-advertise-address=192.168.56.101 ``
+成功执行以后，会看到以下结果
+```
+mkdir -p $HOME/.kube 
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubeadm join --token 22d578.d921a7cf51352441 192.168.56.101:6443
+```
+- 安装flannel。执行 `` kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml ``
+### node
+在node上参考master安装好kubelet和docker，并且设置网桥、转发，然后执行
+`` kubeadm join --token 22d578.d921a7cf51352441 192.168.56.101:6443 ``

@@ -1,0 +1,28 @@
+## kubernetes里面的用户
+- service account
+- normal user
+## 认证策略
+kubernetes使用证书(client certificate),bearer token,authenticating proxy,或者
+http basic auth等来做认证
+### x509 client cert
+证书认证需要在api server使用``--client-ca-file``来进行开启，在证书认证中，api server
+会使用证书里面的common name(CN)来作用username，使用organnization(O)来作为访问的
+group
+### static token file
+api server从``--token-auth-file=``读取bearer token。
+token file以csv的形式,最少包含3个字段，token,user name，user uid，另外还有一个可选
+字段group names,如：
+`` token,user,uid,"group1,group2,group3" ``
+#### bearer token使用
+bearer token可以放在HTTP的请求头里面,入一下形式：
+``Authorization: Bearer 31ada4fd-adec-460c-809a-9e56ceb75269 ``
+
+### bootstrap token
+为了精简新集群的启动，kubernetes提供一种动态管理的bearer token,叫做bootstrap
+token.这个token以secret的形式存储在kube-system这个命名空间中，当创建一个
+bootstrap token以后，Controller Manager中有一个TokenCleaner会在token过期以后
+删除它。
+bearer token的格式为``[a-z0-9]{6}.[a-z0-9]{16}``
+为了开始bearer token，需要在API server的启动参数中增加一个``--enable-bootstrap-token-auth``
+参数,同时开启TokenCleaner Controller，开启的方式为在kube-controller-manager
+的启动参数中指定如下``--controllers=*,tokencleaner``。

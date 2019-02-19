@@ -1,0 +1,24 @@
+# kubernetes给容器传输数据的几种方式
+## 通过定义command和args
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: command-demo
+  labels:
+    purpose: demonstrate-command
+spec:
+  containers:
+  - name: command-demo-container
+    image: debian
+    command: ["printenv"]
+    args: ["HOSTNAME", "KUBERNETES_PORT"]
+  restartPolicy: OnFailure
+```
+## 其他资源
+--|env|volume
+:-|:-|:-
+configMap|spec.containers.env.valueFrom.configMapKeyRef|spec.volumes.configMap\|projected\|downwardAPI
+secret|spec.containers.env.valueFrom.secretKeyRef|spec.volumes.secret\|projected\|downwardAPI
+field|spec.containers.env.valueFrom.fieldRef|spec.volumes.projected\|downwardAPI
+resource|spec.containers.env.valueFrom.resourceFieldRef|spec.volumes.projected\|downwardAPI

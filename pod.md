@@ -100,7 +100,7 @@ pod的控制器有：ReplicationController、Job、DaemonSet、静态pod
 * ### NodeSelector:定向调度  
 可以通过给node设置label，然后再pod的nodeSelector设置相应的属性，具体操作如下
    - 通过kubectl label命令给目标node设置标签  
-   $ kubectl label nodes k8s-node-1 zone=north
+   ```$ kubectl label nodes k8s-node-1 zone=north```
    - 通过给pode的定义加上nodeSelector如
    ```yaml
       apiVersion: v1
@@ -127,7 +127,7 @@ pod的控制器有：ReplicationController、Job、DaemonSet、静态pod
               zone: north
   ```
   然后运行kubectl create -f来创建pod,scheduler就会将该pod调度到拥有zone=north标签的node上
-* ###NodeAffinity：亲和性调度  
+* ### NodeAffinity：亲和性调度  
   nodeSelector需要通过label来进行精准匹配,所以nodeAffinity增加了In、NotIn、Exists、DoesNotExists、Gt、Lt等操作
 ## 5.pod的扩容和缩容
 - ### 手动指定副本数量  
@@ -180,9 +180,9 @@ spec:
 ## 6.pod的滚动升级
 - ### 通过yaml文件滚动升级  
 编写一个yaml文件，然后通过以下命令来进行滚动升级  
-`` kubectl rolling-update redis-master -f redis-master-controller-v2.yaml ``  
+`` $kubectl rolling-update redis-master -f redis-master-controller-v2.yaml ``  
 其中，yaml文件需要注意以下几点  
    + yaml中的name不能与旧的rc相同
    + 在selector中至少要有一个label与旧的RC的label不同，以标识其为新的RC，
 - ### 通过kubectl命令滚动升级  
-``kubectl rolling-update redis-master --image=redis-master:2.0``
+`` $kubectl rolling-update redis-master --image=redis-master:2.0``

@@ -1,0 +1,16 @@
+## Pod相关知识点
+### livenessProbe
+pod.spec.containers.livenessProbe
+
+
+### readinessProbe
+pod.spec.containers.readinessProbe
+
+
+### nodeSelector
+pod.spec.nodeSelector
+
+
+### init containers
+pod.spec.initContainers
+- 顺序执行

@@ -1,0 +1,1 @@
+- failed to load Kubelet config file /etc/kubernetes/kubelet.config.json, error failed to decode, error: no kind "KubeletConfiguration" is registered for version "kubelet.config.k8s.io/v1bate1" in scheme "k8s.io/kubernetes/pkg/kubelet/apis/config/scheme/scheme.go:31

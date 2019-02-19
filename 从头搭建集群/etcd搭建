@@ -1,0 +1,17 @@
+## etcd各个启动参数的含义
+- \-\-name  当前节点的名字
+- \-\-data-dir  数据目录
+- \-\-listen-client-urls 监听的ip和端口，用于客户端访问
+- \-\-listen-peer-urls 监听的ip和端口，用于节点通信
+- \-\-advertise-client-urls 给客户端访问的地址
+- \-\-initial-advertise-peer-urls 监听的ip和端口，用于集群通信
+- \-\-initial-cluster 整个集群的监听的ip和端口，逗号隔开，需匹配各个节点的initial-adverties-peer-urls
+- \-\-initial-cluster-token 用于区分各个不同的集群
+- \-\-peer-client-cert-auth  指定开启节点认证
+- \-\-peer-cert-file peer节点通信的公钥文件
+- \-\-peer-key-file peer节点通信的私钥文件
+- \-\-peer-trusted-ca-file  节点通信根证书
+- \-\-client-cert-auth  指定开启客户端认证
+- \-\-cert-file 和外部通信的公钥
+- \-\-key-file 和外部通信的私钥
+- \-\-trusted-ca-file 和外部通信的根证书

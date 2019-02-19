@@ -1,0 +1,59 @@
+# 准备环境
+- 设置主机名
+- 互相设置免密登录
+- 安装依赖
+- 下载二进制包
+- 关闭防火墙、swap、selinux
+- 机器时间同步
+- ip转发
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.ip_forward=1
+# CA证书和私钥
+- 安装cfssl
+- 创建配置文件
+- 创建证书签名请求文件
+- 生成证书
+# 部署kubectl
+- 二进制文件
+- 创建admin的证书和私钥
+- 创建kubeconfig文件
+# 部署etcd集群
+- 二进制文件
+https://github.com/coreos/etcd/releases
+- 创建etcd的证书和私钥
+- 创建etcd的systemd unit文件
+- 自启动、启动服务
+# 部署flannel网络
+- 二进制文件
+https://github.com/coreos/flannel/releases
+- 创建flannel的证书和私钥
+- 向etcd写入集群pod的网段信息
+- 创建flannel的system的 unit文件
+flannel需要在docker之前启动
+# 部署master节点
+## api-server的高可用配置
+- 安装keepalived haproxy两个应用
+使用yum install keepalived haproxy -y 安装
+- 配置haproxy
+- 配置keepalived
+## 部署kube-apiserver
+- 创建apiserver的证书和私钥
+- 创建加密配置文件encryption-config.yaml
+- 创建kube-apiserver systemd unit文件
+- 自启动、启动kube-apiserver服务
+- 授予kubernetes证书访问kubelet api的权限
+## 部署kube-controller-manager
+- 创建controller-manager的证书、私钥文件
+cn和o都为system:kube-controller-manager
+- 生成kube-controller-manager.kubeconfig文件
+- 创建kube-controller-manager的systemcd unit文件
+## 部署kube-scheduler
+- 创建kube-scheduler的证书、私钥
+CN和O都为system:kube-scheduler
+- 创建kube-scheduler.kubeconfig文件
+- 创建kube-scheduler的systemd unit文件
+- 自启动、启动kube-scheduler服务
+# 部署worker节点
+## 安装docker
+## 部署kubelet
+- 创建kubelet-bootstrap.kubeconfig文件
