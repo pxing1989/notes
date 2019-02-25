@@ -1,0 +1,46 @@
+# 第二章 基础技术
+## linux namespace
+### 概念
+Linux namespace是kernel的一个功能，它可以隔离一系列的资源。如PID(Process ID)、User ID、
+Network等。
+当前linux一共实现了6中不同类型的namespace
+|Namespace类型| 系统调用参数| 内核版本|
+|:--:|:--:|:--:|
+| Mount Namespace | CLONE_NEWNS  | 2.4.19 |
+| UTS Namespace   | CLONE_NEWUTS | 2.6.19 |
+| IPC Namespace   | CLONE_NEWIPC | 2.6.19 |
+| PID Namespace   | CLONE_NEWPID | 2.6.24 |
+| Network Namespace|CLONE_NEWNET | 2.6.29 |
+| User Namespace  | CLONE_NEWUSER | 3.8   |
+Namespace的api调用主要有3种：
+   - clone()创建新进程。根据系统调用参数来判断哪些类型的namespace被创建，而且它们的
+   子进程也会被包含在这些Namespace中。
+   - unshare()将进程移出某个Namespace。
+   - setns()将进程加入到Namespace中。
+### UTS Namespace
+UTS Namespace主要用来隔离nodename和domainname两个系统标识。在UTS Namespace里面，
+每个Namespace允许有自己的hostname
+### IPC Namespace
+IPC Namespace用来隔离System V IPC和POSIX message queues。每一个IPC Namespace都有
+自己的System V IPC和POSIX message queue。
+### PIC Namespace
+PID Namespace是用来隔离进程ID的。同样一个进程在不同的PID Namespace里可以拥有不同PID。
+### Mount Namespace
+Mount Namespace用来隔离各个进程看到的挂在视图点。在不同的Mount Namespace中，看到的文件
+系统层次是不一样的。
+### User Namespace
+User Namespace主要用于隔离用户组ID。也就是说，一个进程的User ID和Group ID在User Namespace
+内外可以不同。User Namespace在kernel 3.8开始加入linux。
+###  Network Namespace
+Network Namespace是用来隔离网络设备、IP地址端口等网络栈的Namespace。Network Namespace
+可以让每个容器拥有自己独立的网络设备，并且容器内的应用可以绑定到自己的端口，每个Namespace内
+的端口互不冲突。在宿主机搭建网桥后，可以方便的实现容器间的通信。
+
+## linux cgroup
+linux cgroup(Control Groups)提供了对一组进程及将来的子进程的资源限制、控制和统计计算能力，
+这些资源包括CPU、内存、存储、网络等。
+cgroup中的3个组件：
+   - cgroup是对进程分组管理的一种机制，一个cgroup包含一组进程，并可以在这个cgroup上增加
+   linux subsystem的各种参数配置
+   - subsystem是一组资源控制的模块，
+   - hierarchy 的功能是把一组cgroup串成一个树状的结构。
